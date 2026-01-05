@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bs
 import time
 import pandas as pd
 import sys
-from ao3funcs import *
+from getsearchdata import *
 
 url_orig = input("copy and paste the search url you are using")
 
