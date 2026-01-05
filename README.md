@@ -8,7 +8,7 @@ please be mindful of AO3's requests regarding web scraping. set user headers to 
 reference here:
 https://www.transformativeworks.org/ai-and-data-scraping-on-the-archive/
 
-because there is major concern in the ao3 community regarding scraping for AI training and generation purposes, this code does NOT include the ability to retrieve individual work, textual content, user, or comment data. (if you are seeing this right now, it's likely because i have granted you access to this repo and have asked about your use purposes. please do not modify this code in any way, shape, or form). users' works are protected by copyright (per the OTW) and cannot be reproduced in any way for commercial purposes. in addition to that, commercializing any part of reproduced works puts the entire fanfiction community at risk. in short, don't be an ass.
+out of respect for the ao3 user community concerns regarding AI scraping and training, this code does NOT include the ability to retrieve individual work identification, textual content, user, or comment data. (if you are seeing this right now, it's likely because i have granted you access to this repo and have asked about your use purposes. please do not modify this code in any way, shape, or form). users' works are protected by copyright (per the OTW) and cannot be reproduced in any way for commercial purposes. in addition to that, commercializing any part of reproduced works puts the entire fanfiction community at risk. in short, don't be an ass.
 
 the copyright license for this work strictly prohibits the code's use for AI training purposes
 
