@@ -77,7 +77,7 @@ class tagAttributes:
             return "none"
         else:
             relatlist = relations[0]
-            return relations
+            return relatlist
         
     def getCharacters(self):
         charac = self.tags.find_all('li', {'class':'characters'})
