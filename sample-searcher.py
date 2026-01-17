@@ -23,15 +23,12 @@ def makepagelist(startpage, endpage):
             for i in range (int(startpage), int(endpage) + 1):
                         pagelist.append(i)
             return pagelist
-def datafunc(num):
-            try:
-                workitems = requestfunc(url_orig, num)
-            except requests.exceptions.HTTPError as err:
-                if err.response.status_code == 404:
-                    print(f"404 Error at page {num}")
-                elif err.response.status_code == 429:
-                    print(f"too many requests error, take a minute and restart with page {num}") #if you get this, please be a good person and add a few seconds to your timing
-                break
+def datafunc(url_orig, pagelist):
+    global pages_to_retry
+    pages_to_retry = []
+    for num in pagelist:
+        try:
+            workitems = requestfunc(url_orig, num)
             print(f"page {num} has been souped")
             for i in workitems:
                 try:
@@ -64,19 +61,19 @@ def datafunc(num):
                 writer.writerow({'Date Last Updated':datetime, 'Warnings':warning, 'Ratings':rating, 'Fandom':fandom, 'Pairing':relationship, 'Character':character, 'Freeform':freeform, 'Word Count':wordcount, 'Kudos':kudos, 'Hits':hits, 'Language':language})
             time.sleep(6)
             print(f"page {num} has been added to your csv")
-
-def datafuncloop(url_orig, pagelist):
-    global pages_to_retry
-    pages_to_retry = []
-    for num in pagelist:
-        try:
-            datafunc(num)
         except KeyboardInterrupt:
-            print(f"keyboard interrrupt at page {num}")
+            print(f"keyboard interrupt at page {num}")
+            break
+        except requests.exceptions.HTTPError as err:
+            if err.response.status_code == 404:
+                print(f"404 Error at page {num}")
+            elif err.response.status_code == 429:
+                print(f"too many requests error, take a minute and restart with page {num}") #if you get this, please be a good person and add a few seconds to your timing
             break
         except Exception as e:
             print(f"there's been another kind of exception: {e}\nadding {num} to list of pages to retry")
             pages_to_retry.append(num)
+            continue
 
 startpage = "" #set an integer for a startpage
 endpage = "" #same here
@@ -88,13 +85,13 @@ fieldnames = ['Date Last Updated', 'Warnings', 'Ratings', 'Fandom', 'Pairing', '
 if os.path.exists(filepath):
             with open(filepath, 'a') as file:
                         writer = csv.DictWriter(file, fieldnames = fieldnames)
-                        datafuncloop(firsturl, pagelist)
+                        datafunc(firsturl, pagelist)
 
 else:
             with open(filepath, 'w') as file:
                         writer = csv.DictWriter(file, fieldnames = fieldnames)
                         writer.writeheader()
-                        datafuncloop(firsturl, pagelist)
+                        datafunc(firsturl, pagelist)
 
 #this next part will automatically go through and retry if there are error pages, i have not built it in yet to retry if they return an error again but i'm working on it
 
