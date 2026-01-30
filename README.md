@@ -11,4 +11,4 @@ https://www.transformativeworks.org/ai-and-data-scraping-on-the-archive/
 
 the copyright license for this work strictly prohibits the code's use for AI training purposes
 
-i'm on tumblr as secretly-historic; i'd love to see any cool things made with this package!
+i'm on tumblr as secretly-historic; i'd love to see any cool things made with this repo!
