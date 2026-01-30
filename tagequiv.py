@@ -13,7 +13,7 @@ class EquivGetter:
         concaturl = f"{baseurl}/{urladd}"
         return concaturl
     
-class TagListing(EquivGetter): #works
+class TagListing(EquivGetter):
     def tagpage(self):
         url = EquivGetter.split_to_url(self)
         request = Request(url)
@@ -30,7 +30,7 @@ class FamilyTree(TagListing):
             tagname = tag.text
             parenttags.append(tagname)
         return parenttags
-    def siblingtags(self): #note: this does not distinguish between parent and child tags
+    def siblingtags(self):
         synonyms = []
         item = TagListing.tagpage(self)
         selection = item.find('div', class_='synonym listbox group')
@@ -39,7 +39,7 @@ class FamilyTree(TagListing):
             tagname = tag.text
             synonyms.append(tagname)
         return synonyms
-    def childtags(self):
+    def childtags(self):  #note: this does not distinguish between child and grandchild tags
         children = []
         item = TagListing.tagpage(self)
         selection = item.find('div', class_='sub listbox group')
