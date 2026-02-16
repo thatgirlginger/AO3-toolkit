@@ -1,4 +1,8 @@
+from bs4 import BeautifulSoup as bs
 
+'''
+these classes find and retrieve different work attributes
+'''
 
 class WorkAttributes:
     info="functions to get the top-level work attributes"
