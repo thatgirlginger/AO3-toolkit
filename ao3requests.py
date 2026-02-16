@@ -1,7 +1,9 @@
 import requests
 from bs4 import BeautifulSoup as bs
 
-
+'''
+this might be redundant to have but it helps clean up code for me, this just makes and sends requests, along with a function to paginate if you go from my sample
+'''
 class Request:
     def __init__(self, url):
         self.url = url
