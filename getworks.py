@@ -1,20 +1,20 @@
 from ao3funcs import *
 from ao3requests import *
 import csv
-import logging
 import os
+import pandas as pd
 import pickle
 import sys
-from logsettings import setlog
 
-setlog()
-
-def midpointsave(x):
+'''
+Sample use of the work attribute classes. Works with any work search results/work browsing page. Does not work with bookmarked pages at this point
+'''
+def midpointsave(x): #super helpful if you want to pause and restart or if ao3 is having a bad day
     with open('pausedpage.pkl', 'wb') as f:
-            pickle.dump(x, f)    
+            pickle.dump(x, f)   
+
 
 def getsearchdata(page):
-    logging.debug(f"log for scraping search {page}")
     n=1
     try:
         while True:
@@ -52,43 +52,44 @@ def getsearchdata(page):
                         chapters = stats.getchapters()
                         writer.writerow({'Date Last Updated':datetime, 'Warnings':warning, 'Category':category, 'Ratings':rating, 'Fandom':fandom, 'Pairing':relationship, 'Character':character, 'Freeform':freeform, 'Word Count':wordcount, 'Kudos':kudos, 'Hits':hits, 'Language':language, 'Chapter Count':chapters})
                         p+=1
-                        logging.DEBUG(f"work {p} of the page has been written to your csv")
+                        #logging.DEBUG(f"work {p} of the page has been written to your csv")
                 except AttributeError:
-                    logging.warning("there's been an attribute error, ignoring for now but check csv to see what happened")
+                    #logging.warning("there's been an attribute error, ignoring for now but check csv to see what happened")
+                    pass #this one just happens sometimes, i'm not entirely sure why but it never turns out to be an issue. if you are worried about it, add in a midpointsavepage and exit here to resart
                 n+=1
                 logging.info(f"page {n} souped")
             page = paginate(pageitem)
     except KeyboardInterrupt:
         midpointsave(page)
-        logging.info(f"interrupted by user at {n}, see log for details")
+        #logging.info(f"interrupted by user at {n}, see log for details")
         sys.exit()
     except requests.exceptions.HTTPError as err:
-        logging.error(f"there's been an error getting the page: {err}")
+        #logging.error(f"there's been an error getting the page: {err}")
         midpointsave(page)
         sys.exit()
     except Exception as e:
-        logging.error(f"there's been an error at page {n}: {e}")
+        #logging.error(f"there's been an error at page {n}: {e}")
         print("there's been an error, see log for details")
         midpointsave(page)
         sys.exit()
 
 
-url = "https://archiveofourown.org/tags/French%20Revolution/works" #eventually sys.argv[1]
+url = sys.argv[1]
 
 filepath = sys.argv[2]
 fieldnames = ['Date Last Updated', 'Warnings', 'Category', 'Ratings', 'Fandom', 'Pairing', 'Character', 'Freeform', 'Word Count', 'Kudos', 'Hits', 'Language', 'Chapter Count']
 
-fullfilepath = f"/Users/gingermaemiller/Desktop/ao3data/{filepath}.csv"
-
-if not os.path.exists(fullfilepath):
-    with open(fullfilepath, "w") as csvfile:
+if not os.path.exists(filepath):
+    with open(filepath, "w") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         getsearchdata(page=url)
 else:
-    with open(fullfilepath, 'a') as csvfile:
+    with open(filepath, 'a') as csvfile:
         with open('pausedpage.pkl', 'rb') as f:
             page = pickle.load(f)
         getsearchdata(page=page)
 
-#write function to read as a dataframe and drop duplicates
+df = pd.read_csv(filepath)
+df.drop_duplicates(inplace=True)
+df.to_csv(filepath)
