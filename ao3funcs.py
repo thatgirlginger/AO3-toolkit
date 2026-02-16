@@ -8,6 +8,8 @@ class WorkAttributes:
     info="functions to get the top-level work attributes"
     def __init__(self, item):
         self.item = item
+        if not item.isinstance('bs4.NavigableString'):
+            raise TypeError("item must be a beautifulsoup navigable string") 
     def datetime(self):
         dateclass = self.item.find('p', {'class':'datetime'})
         date = dateclass.get_text()
