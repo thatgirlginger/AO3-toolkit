@@ -2,6 +2,9 @@ import ao3funcs
 from ao3requests import *
 import counters
 
+'''
+Retrieves the entire family tree of any given tag
+'''
 class EquivGetter:
     info="returns tag equivalency list for a given tag"
     def __init__(self, tagname):
