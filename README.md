@@ -49,6 +49,8 @@ $ python3 getworks.py <path-to-your-csv-.csv> <url-to-scrape>
 ```
 as ao3 users know too well, the server likes to just Do Stuff sometimes. if that happens, this code has a catch built-in: it pickles the url of whatever page you were on when the Thing happened. since the code writes to the csv line by line, if there's an exception that side of things will be fine. If you run it again, make sure you use the same filepath. it doesn't matter too much if you use the url or not, because no matter what it'll set the url to scrape as whatever you pickled.
 
+PSA: ao3 has various traffic/rate-limiting systems, i've included time stuff in my sample (getworks.py) script. i've also run into a lot of cloudflare 525 errors using a VPN. from what i've been able to glean (with my albeit limited network-stuff knowledge) it could be related to the server used being in a different time zone than the one your system uses. i haven't tested my theory out yet (i use the free Proton VPN and i haven't been randomly assigned one in my own timezone as of late) but be warned if you get similar errors
+
 ### if there's any issues
 please don't hesitate to send in an issue or submit a pull request! I'm still learning a lot of things, so any of this is a teachable moment for me :-)
 
