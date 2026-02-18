@@ -14,7 +14,7 @@ def midpointsave(x): #super helpful if you want to pause and restart or if ao3 i
             pickle.dump(x, f)   
 
 
-def getsearchdata(page):
+def getsearchdata(page, writer):
     n=1
     try:
         while True:
@@ -23,39 +23,33 @@ def getsearchdata(page):
             else:
                 response = Request(page)
                 pageitem = response.objectify()
-                try:
-                    items = pageitem.find('ol', {'class':'work index group'})
-                    listings = items.find_all('li', {'role':'article'})
-                    p=0
-                    for i in listings:
-                        work = WorkAttributes(i)
-                        datetime = work.datetime()
-                        fandom = work.getfandom()
+                items = pageitem.find('ol', {'class':'work index group'})
+                listings = items.find_all('li', {'role':'article'})
+                p=0
+                for i in listings:
+                    work = WorkAttributes(i)
+                    datetime = work.datetime()
+                    fandom = work.getfandom()
 
-                        requireds = RequiredTags(i)
-                        rating = requireds.getrating()
-                        warning = requireds.getwarnings()
-                        category = requireds.getcategory()
-
+                    requireds = RequiredTags(i)
+                    rating = requireds.getrating()
+                    warning = requireds.getwarnings()
+                    category = requireds.getcategory()
                     
-                        attrs = TagAttributes(i)
-                        relationship = attrs.getrelationship()
-                        character = attrs.getcharacters()
-                        freeform = attrs.getfreeforms()
+                    attrs = TagAttributes(i)
+                    relationship = attrs.getrelationship()
+                    character = attrs.getcharacters()
+                    freeform = attrs.getfreeforms()
 
-                    
-                        stats = Stats(i)
-                        language = stats.getlanguage()
-                        wordcount = stats.getwords()
-                        kudos = stats.getkudos()
-                        hits = stats.gethits()
-                        chapters = stats.getchapters()
-                        writer.writerow({'Date Last Updated':datetime, 'Warnings':warning, 'Category':category, 'Ratings':rating, 'Fandom':fandom, 'Pairing':relationship, 'Character':character, 'Freeform':freeform, 'Word Count':wordcount, 'Kudos':kudos, 'Hits':hits, 'Language':language, 'Chapter Count':chapters})
-                        p+=1
-                        #logging.DEBUG(f"work {p} of the page has been written to your csv")
-                except AttributeError:
-                    #logging.warning("there's been an attribute error, ignoring for now but check csv to see what happened")
-                    pass #this one just happens sometimes, i'm not entirely sure why but it never turns out to be an issue. if you are worried about it, add in a midpointsavepage and exit here to resart
+                    stats = Stats(i)
+                    language = stats.getlanguage()
+                    wordcount = stats.getwords()
+                    kudos = stats.getkudos()
+                    hits = stats.gethits()
+                    chapters = stats.getchapters()
+                    writer.writerow({'Date Last Updated':datetime, 'Warnings':warning, 'Category':category, 'Ratings':rating, 'Fandom':fandom, 'Pairing':relationship, 'Character':character, 'Freeform':freeform, 'Word Count':wordcount, 'Kudos':kudos, 'Hits':hits, 'Language':language, 'Chapter Count':chapters})
+                    p+=1
+                    #logging.debug(f"work {p} of the page has been written to your csv")
                 n+=1
                 logging.info(f"page {n} souped")
             page = paginate(pageitem)
@@ -83,12 +77,12 @@ if not os.path.exists(filepath):
     with open(filepath, "w") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        getsearchdata(page=url)
+        getsearchdata(page=url, writer=writer)
 else:
     with open(filepath, 'a') as csvfile:
         with open('pausedpage.pkl', 'rb') as f:
             page = pickle.load(f)
-        getsearchdata(page=page)
+        getsearchdata(page=page, writer=writer)
 
 df = pd.read_csv(filepath)
 df.drop_duplicates(inplace=True)
