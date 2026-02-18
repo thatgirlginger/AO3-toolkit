@@ -8,13 +8,13 @@ class Request:
     def __init__(self, url):
         self.url = url
     def objectify(self):
-        try:
-            response = requests.get(self.url, {'user-agent':'bot'})
-        except requests.exceptions.HTTPError as err:
-            print(f"error code f{err}")
-        html = response.content
-        soup = bs(html, 'html.parser')
-        return soup
+        response = requests.get(self.url, {'user-agent':'bot'})
+        if response.status_code != 200:
+            raise requests.exceptions.HTTPError(f"invalid response code: {response.status_code}")
+        else:
+            html = response.content
+            soup = bs(html, 'html.parser')
+            return soup
 
 def paginate(object):
     pagy = object.find('ol', class_='pagination actions pagy')
