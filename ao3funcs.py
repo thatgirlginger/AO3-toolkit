@@ -1,11 +1,10 @@
 from bs4 import BeautifulSoup as bs
 
 '''
-these classes find and retrieve different work attributes
+For finding and retrieving various work attributes
 '''
 
 class WorkAttributes:
-    info="functions to get the top-level work attributes"
     def __init__(self, item):
         self.item = item
         if not item.isinstance('bs4.NavigableString'):
@@ -129,20 +128,33 @@ class Stats(WorkAttributes):
         return words
     def gethits(self):
         stat = WorkAttributes.statsblock(self)
-        hits = stat.find('dd', {'class':'hits'}).text
+        hit = stat.find('dd', {'class':'hits'})
+        if hit == None: 
+            hits = "None"
+        else:
+            hits = hit.text
         return hits
     def getkudos(self):
         stat = WorkAttributes.statsblock(self)
         kudo = stat.find('dd', {'class':'kudos'})
-        kudos = kudo.find('a').text
+        if kudo == None:
+            kudos = "None"
+        else:
+            kudos = kudo.find('a').text
         return kudos
     def getchapters(self):
         stat = WorkAttributes.statsblock(self)
         chap = stat.find('dd', {'class':'chapters'})
-        chapter = chap.find('a').text
+        if chap == None:
+            chapter = "None"
+        else:
+            chapter = chap.find('a').text
         return chapter
     def getbookmarks(self):
         stat = WorkAttributes.statsblock(self)
         book = stat.find('dd', {'class':'bookmarks'})
-        bookmark = book.find('a').text
+        if book == None:
+            bookmark = "None"
+        else:
+            bookmark = book.find('a').text
         return bookmark
