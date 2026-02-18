@@ -127,7 +127,7 @@ class Stats(WorkAttributes):
     def gethits(self):
         stat = WorkAttributes.statsblock(self)
         hit = stat.find('dd', {'class':'hits'})
-        if hit == None: 
+        if hit == None:
             hits = "None"
         else:
             hits = hit.text
@@ -145,6 +145,8 @@ class Stats(WorkAttributes):
         chap = stat.find('dd', {'class':'chapters'})
         if chap == None:
             chapter = "None"
+        elif chap.find('a') == None:
+            chapter = chap.text
         else:
             chapter = chap.find('a').text
         return chapter
