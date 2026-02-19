@@ -24,7 +24,7 @@ class TagListing(EquivGetter):
         return item
     
 class FamilyTree(TagListing):
-    def parenttags(self):
+    def parents(self):
         parenttags = []
         item = TagListing.tagpage(self)
         select = item.find('div', class_='parent listbox group')
@@ -33,7 +33,7 @@ class FamilyTree(TagListing):
             tagname = tag.text
             parenttags.append(tagname)
         return parenttags
-    def siblingtags(self):
+    def siblings(self):
         synonyms = []
         item = TagListing.tagpage(self)
         selection = item.find('div', class_='synonym listbox group')
@@ -42,7 +42,7 @@ class FamilyTree(TagListing):
             tagname = tag.text
             synonyms.append(tagname)
         return synonyms
-    def childtags(self):  #note: this does not distinguish between child and grandchild tags
+    def children(self):  #note: this does not distinguish between child and grandchild tags
         children = []
         item = TagListing.tagpage(self)
         selection = item.find('div', class_='sub listbox group')
