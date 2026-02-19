@@ -1,17 +1,19 @@
 from bs4 import BeautifulSoup as bs
-
 '''
-For finding and retrieving various work attributes
+classes and methods for work information listed on ao3
 '''
 
 class WorkAttributes:
+    '''
+    get the attributes for each work, all accessible from the same parent element
+    '''
     def __init__(self, item):
         self.item = item
     def datetime(self):
         dateclass = self.item.find('p', {'class':'datetime'})
         date = dateclass.get_text()
-        return date 
-    def getfandom(self):
+        return date
+    def fandom(self):
         heading = self.item.find('h5', {'class':'fandoms heading'})
         fandoms = heading.find_all('a', {'class':'tag'})
         fandommultis = []
@@ -19,42 +21,42 @@ class WorkAttributes:
             domfan = i.get_text()
             fandommultis.append(domfan)
         if len(fandommultis) > 1:
-            fandomslist = '+'.join(fandommultis)
+            fandoms = '+'.join(fandommultis)
         else:
-            fandomslist = fandommultis[0]
-        return fandomslist
-    def reqtagblock(self):
+            fandoms = fandommultis[0]
+        return fandoms
+    def requiredtags(self):
         req = self.item.find('ul', {'class':'required-tags'})
         return req
-    def attrtagblock(self):
+    def attributes(self):
         tags = self.item.find('ul', {'class':'tags commas'})
         return tags
-    def statsblock(self):
+    def stats(self):
         stats = self.item.find('dl', {'class':'stats'})
         return stats
 
 class RequiredTags(WorkAttributes):
-    def getrating(self):
-        req = WorkAttributes.reqtagblock(self)
+    def rating(self):
+        req = WorkAttributes.requiredtags(self)
         rat = req.find('li')
         ratin = rat.find('span')
-        rated = ratin.get('title')
-        return rated
-    def getwarnings(self):
-        req = WorkAttributes.reqtagblock(self)
+        rating = ratin.get('title')
+        return rating
+    def warnings(self):
+        req = WorkAttributes.requiredtags(self)
         warn = req.find('li')
         warned = warn.find_next_sibling('li')
         warning = warned.find('span').get('title')
         return warning
-    def getcategory(self):
-        req = WorkAttributes.reqtagblock(self)
+    def category(self):
+        req = WorkAttributes.requiredtags(self)
         cate = req.find('li')
         categ = cate.find_next_sibling('li')
         categor = categ.find_next_sibling('li')
         category = categor.find('span').get('title')
         return category
-    def getcompletionstat(self):
-        req = WorkAttributes.reqtagblock(self)
+    def completion(self):
+        req = WorkAttributes.requiredtags(self)
         com = req.find('li')
         comp = com.find_next_sibling('li')
         complet = comp.find_next_sibling('li')
@@ -64,8 +66,8 @@ class RequiredTags(WorkAttributes):
 
 class TagAttributes(WorkAttributes):
     info = "this is the class that gets the tag attributes of a work"
-    def getrelationship(self):
-        tags = WorkAttributes.attrtagblock(self)
+    def ships(self):
+        tags = WorkAttributes.attributes(self)
         relation = tags.find_all('li', {'class':'relationships'})
         relations = []
         for it in relation:
@@ -81,8 +83,8 @@ class TagAttributes(WorkAttributes):
             relatlist = relations[0]
             return relatlist
         
-    def getcharacters(self):
-        tags = WorkAttributes.attrtagblock(self)
+    def characters(self):
+        tags = WorkAttributes.attributes(self)
         charac = tags.find_all('li', {'class':'characters'})
         characs = []
         for ite in charac:
@@ -98,8 +100,8 @@ class TagAttributes(WorkAttributes):
             characlist = characs[0]
             return characlist
         
-    def getfreeforms(self):
-        tags = WorkAttributes.attrtagblock(self)
+    def freeforms(self):
+        tags = WorkAttributes.attributes(self)
         frees = tags.find_all('li', {'class':'freeforms'})
         freebies = []
         for itera in frees:
@@ -116,44 +118,44 @@ class TagAttributes(WorkAttributes):
             return freeflist
 
 class Stats(WorkAttributes):
-    def getlanguage(self):
-        stat = WorkAttributes.statsblock(self)
+    def language(self):
+        stat = WorkAttributes.stats(self)
         language = stat.find('dd', {'class':'language'}).get_text()
         return language
-    def getwords(self):
-        stat = WorkAttributes.statsblock(self)
+    def words(self):
+        stat = WorkAttributes.stats(self)
         words = stat.find('dd', {'class': 'words'}).get_text()
         return words
-    def gethits(self):
-        stat = WorkAttributes.statsblock(self)
+    def hits(self):
+        stat = WorkAttributes.stats(self)
         hit = stat.find('dd', {'class':'hits'})
-        if hit == None:
+        if hit is None:
             hits = "None"
         else:
             hits = hit.text
         return hits
-    def getkudos(self):
-        stat = WorkAttributes.statsblock(self)
+    def kudos(self):
+        stat = WorkAttributes.stats(self)
         kudo = stat.find('dd', {'class':'kudos'})
-        if kudo == None:
+        if kudo is None:
             kudos = "None"
         else:
             kudos = kudo.find('a').text
         return kudos
-    def getchapters(self):
-        stat = WorkAttributes.statsblock(self)
+    def chapters(self):
+        stat = WorkAttributes.stats(self)
         chap = stat.find('dd', {'class':'chapters'})
-        if chap == None:
+        if chap is None:
             chapter = "None"
-        elif chap.find('a') == None:
+        elif chap.find('a') is None:
             chapter = chap.text
         else:
             chapter = chap.find('a').text
         return chapter
-    def getbookmarks(self):
-        stat = WorkAttributes.statsblock(self)
+    def bookmarks(self):
+        stat = WorkAttributes.stats(self)
         book = stat.find('dd', {'class':'bookmarks'})
-        if book == None:
+        if book is None:
             bookmark = "None"
         else:
             bookmark = book.find('a').text
