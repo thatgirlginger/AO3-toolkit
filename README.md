@@ -45,7 +45,7 @@ that's what getworks.py is for! it takes a given set of works (like a work searc
 to use it:
 
 ```
-$ python3 getworks.py <path-to-your-csv-.csv> <url-to-scrape>
+$ python3 sample_worksearch.py <path-to-your-csv-.csv> <url-to-scrape>
 ```
 as ao3 users know too well, the server likes to just Do Stuff sometimes. if that happens, this code has a catch built-in: it pickles the url of whatever page you were on when the Thing happened. since the code writes to the csv line by line, if there's an exception that side of things will be fine. If you run it again, make sure you use the same filepath. it doesn't matter too much if you use the url or not, because no matter what it'll set the url to scrape as whatever you pickled.
 
