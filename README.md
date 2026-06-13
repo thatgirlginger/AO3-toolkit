@@ -1,4 +1,7 @@
 # AO3-Scraper-Tools
+
+NOTE: THIS REPO HAS MIGRATED TO CODEBERG: https://codeberg.org/gsedmae/ao3-toolkit. MAINTENANCE IS NO LONGER HAPPENING HERE :-)
+
 a python set for scraping and getting AO3 fanfiction data for given parameters compatible with Python3
 
 this particular AO3 scraping repository is made customizable to what you want to do with your project. i've included a couple of sample scripts, just to show how i use these in gathering data on individual search criteria and whatnot
